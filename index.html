@@ -1,123 +1,163 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Will You Be My Valentine? 💖</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Letter For You 💌</title>
 
-  <style>
-    body {
-      height: 100vh;
-      margin: 0;
-      background: linear-gradient(135deg, #ffdde1, #ee9ca7);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-family: 'Comic Sans MS', cursive, sans-serif;
-    }
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  background: linear-gradient(135deg, #ffdde1, #ee9ca7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+}
 
-    .card {
-      background: white;
-      padding: 30px;
-      border-radius: 20px;
-      text-align: center;
-      width: 320px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-    }
+.container {
+  position: relative;
+  width: 320px;
+  height: 220px;
+  cursor: pointer;
+}
 
-    h1 {
-      color: #ff4d6d;
-      margin-bottom: 10px;
-    }
+/* Envelope */
+.envelope {
+  position: absolute;
+  width: 100%;
+  height: 200px;
+  background: #ffb6c1;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  z-index: 2;
+  transition: transform 0.6s ease;
+}
 
-    p {
-      margin-bottom: 25px;
-    }
+.envelope h2 {
+  margin: 0;
+  color: #b3003b;
+}
 
-    /* IMPORTANT FIX */
-    .buttons {
-      position: relative;   /* 🔑 anchor */
-      width: 100%;
-      height: 120px;
-    }
+/* Letter */
+.letter {
+  position: absolute;
+  width: 100%;
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  transform: translateY(80px);
+  opacity: 0;
+  transition: all 0.6s ease;
+  z-index: 1;
+}
 
-    button {
-      width: 110px;
-      height: 45px;
-      font-size: 16px;
-      border: none;
-      border-radius: 25px;
-      cursor: pointer;
-      position: absolute;
-      transition: left 0.25s ease, top 0.25s ease;
-    }
+.open .envelope {
+  transform: translateY(-120px);
+}
 
-    #yes {
-      background: #ff4d6d;
-      color: white;
-      left: 20px;
-      bottom: 10px;
-    }
+.open .letter {
+  transform: translateY(0);
+  opacity: 1;
+}
 
-  #no {
-    background: #ccc;
-    color: black;
-    left: 180px;   /* initial position */
-    top: 65px;
-  }
+/* Buttons */
+.buttons {
+  margin-top: 20px;
+}
 
-  </style>
+button {
+  width: 120px;
+  padding: 10px;
+  border-radius: 20px;
+  border: none;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+#yes {
+  background: #ff4d6d;
+  color: white;
+}
+
+#no {
+  background: #ccc;
+  margin-top: 10px;
+}
+</style>
 </head>
+
 <body>
 
-<div class="card">
-  <h1>Hey you 💕</h1>
-  <p>Will you be my Valentine? 🌹</p>
+<div class="container" id="container">
+  <div class="envelope">
+    <h2>To Sangamitha 💌<br><small>(click to open)</small></h2>
+  </div>
 
-  <div class="buttons">
-    <button id="yes">Yes 💖</button>
-    <button id="no">No 😌</button>
+  <div class="letter">
+    <h3>Hi baby </h3>
+    <p>Will you be my Valentine? 🌹</p>
+
+    <div class="buttons">
+      <button id="yes">Yes 💖</button><br>
+      <button id="no">No 😒</button>
+    </div>
   </div>
 </div>
 
 <script>
-  const noBtn = document.getElementById("no");
-  const box = document.querySelector(".buttons");
+const container = document.getElementById("container");
+const noBtn = document.getElementById("no");
+const yesBtn = document.getElementById("yes");
 
-  function moveNo() {
-    const maxX = box.clientWidth - noBtn.offsetWidth;
-    const maxY = box.clientHeight - noBtn.offsetHeight;
+let opened = false;
+let noTexts = [
+  "Wrong option hoe 😤",
+  "Wow. Try again.",
+  "Psych 😌",
+  "That ain't it",
+  "Choose wisely 😏"
+];
+let noIndex = 0;
 
-    const x = Math.random() * maxX;
-    const y = Math.random() * maxY;
-
-    noBtn.style.left = `${x}px`;
-    noBtn.style.top = `${y}px`;
+/* Open envelope */
+container.addEventListener("click", () => {
+  if (!opened) {
+    container.classList.add("open");
+    opened = true;
   }
+});
 
-  noBtn.addEventListener("mouseenter", moveNo);
-  noBtn.addEventListener("touchstart", moveNo);
+/* Cycle No button text */
+noBtn.addEventListener("click", (e) => {
+  e.stopPropagation(); // prevent reopening animation
+  noBtn.textContent = noTexts[noIndex];
+  noIndex = (noIndex + 1) % noTexts.length;
+});
 
-  document.getElementById("yes").addEventListener("click", () => {
-    document.body.innerHTML = `
-      <div style="
-        height:100vh;
-        display:flex;
-        justify-content:center;
-        align-items:center;
-        background:linear-gradient(135deg,#ffdde1,#ee9ca7);
-        font-family:Comic Sans MS;
-        text-align:center;
-      ">
-        <h1>
-          YAYYY 💖🥰<br>
-          That's what I thought (Love you)!
-        </h1>
-      </div>
-    `;
-  });
+/* Yes click */
+yesBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+  document.body.innerHTML = `
+    <div style="
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+      background:linear-gradient(135deg,#ffdde1,#ee9ca7);
+      font-family:Comic Sans MS;
+    ">
+      <h1>That’s what I thought 💖<br>Love you 🥰</h1>
+    </div>
+  `;
+});
 </script>
 
 </body>
 </html>
-
